@@ -49,6 +49,23 @@ function drawImage(ctx){
   ctx.drawImage(img, 100, 100, 50, 50);
 }
 
+function drawStar(x, y, radius) {
+  let ctx = document.getElementById("canvas").getContext("2d");
+  ctx.save();
+  ctx.beginPath();
+  ctx.translate(x, y);
+  ctx.moveTo(0,0 + radius);
+  for (let i = 0; i < 5; i++) {
+    ctx.rotate(Math.PI / 5);
+    ctx.lineTo(0, radius * 3);
+    ctx.rotate(Math.PI / 5);
+    ctx.lineTo(0, 0 + radius);
+  }
+  ctx.closePath();
+  ctx.fill();
+  ctx.restore();
+}
+
 function drawFlag(ctx){
   //background
   ctx.fillStyle = "rgb(0, 156, 55)";
@@ -73,12 +90,38 @@ function drawFlag(ctx){
   ctx.stroke();
   ctx.fillStyle = "rgb(0, 34, 119)";
   ctx.fill();
+  //save b4 clip
+  ctx.save();
+  //clip white band to inner blue circle
+  ctx.beginPath();
+  ctx.arc(500, 350, 175, 0, 2 * Math.PI);
+  ctx.clip();
   //white band
   ctx.beginPath();
   ctx.arc(400, 700, 425, Math.PI, 0);
-  ctx.arc(400, 700, 400, Math.PI, 0);
   ctx.strokeStyle = "white";
   ctx.stroke();
   ctx.fillStyle = "white";
   ctx.fill();
+  ctx.closePath();
+  //fill rest of blue circle
+  ctx.beginPath();
+  ctx.arc(400, 700, 400, Math.PI, 0);
+  ctx.closePath();
+  ctx.strokeStyle = "rgb(0, 34, 119)";
+  ctx.stroke();
+  ctx.fillStyle = "rgb(0, 34, 119)";
+  ctx.fill();
+  //remove clip state
+  ctx.restore();
+  //draw stars
+  ctx.fillStyle = "white";
+  ctx.translate(500, 350);
+  //https://en.wikipedia.org/wiki/Flag_of_Brazil#/media/File:Flag_of_Brazil_(dimensions).svg
+  drawStar(0,90,3);
+  drawStar(0,36,2);
+  drawStar(18,54,2);
+  drawStar(-18, 54, 2);
+  drawStar(-9, 72, 1);
+  drawStar(9, 0, 2);
 }
